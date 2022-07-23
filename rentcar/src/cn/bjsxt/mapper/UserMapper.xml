@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bjsxt.mapper.UserMapper">
+
+	<select id="findUserById"  resultType="cn.bjsxt.pojo.User">
+		select userid,username,userpwd,realname,identity,sex,address,phone,position 
+		from user where userid=#{0}
+	</select>
+
+	<select id="findUserByName" resultType="cn.bjsxt.pojo.User">
+		select username,userpwd,realname,identity,sex,address,phone,position,roleid
+		from user where username=#{0}
+	</select>
+
+
+	<select id="login" resultType="cn.bjsxt.pojo.User">
+	<!-- select 项目:一定要跟实体类的属性字段一致.-->
+		select userId,username,userpwd,realname,identity,sex,address,phone,position from user
+		where username = #{0} and userpwd = #{1}
+	</select>
+	<insert id="addLoginlog">
+		INSERT into loginlog(username,loginip,logintime) VALUES(#{0},#{1},#{2});
+	</insert>
+	
+	<select id="findUsers" resultType="cn.bjsxt.pojo.User" >
+	select userid,username,userpwd,realname,identity,sex,address,phone, position,roleid from user
+	<where>
+		<if test="username!=null">
+			username like concat(concat('%',#{username}),'%')
+		</if>
+		<if test="identity!=null">
+			and identity=#{identity}
+		</if>
+		<if test="phone!=null">
+			and phone = #{phone}
+		</if>
+	</where>
+	</select>
+	
+	<delete id="deleteById">
+		delete from user where userid = #{0}
+	</delete>
+	<insert id="addUser">
+		insert into user (username,userpwd,realname,identity,sex,address,phone,position,roleid)
+		value(#{username},#{userpwd},#{realname},
+		#{identity},#{sex},#{address},#{phone},#{position},#{roleid})
+	</insert>
+	<update id="updateUser" parameterType="cn.bjsxt.pojo.User">
+		update user
+		<set>
+			<if test="username!=null"> username=#{username}, </if>
+			<if test="userpwd!=null"> userpwd=#{userpwd}, </if>
+			<if test="realname!=null"> realname=#{realname}, </if>
+			<if test="identity!=null"> identity=#{identity}, </if>
+			<if test="sex!=null"> sex=#{sex}, </if>
+			<if test="address!=null"> address=#{address}, </if>
+			<if test="phone!=null"> phone=#{phone}, </if>
+			<if test="position!=null"> position=#{position}, </if>
+			<if test="roleid!=null"> roleid=#{roleid} </if>
+		</set>
+		<where>
+			userid = #{userid}
+		</where>
+	</update>
+</mapper>

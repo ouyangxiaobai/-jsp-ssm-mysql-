@@ -1,0 +1,150 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" 
+			+ request.getServerPort() + path + "/";
+%>
+<!DOCTYPE html>
+<html lang="zh-cn"> 
+<head>
+    <meta http-equiv="Content-Type" constent="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>网站信息</title>  
+    <base href="<%=basePath %>"  />
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script src="My97DatePicker/WdatePicker.js"></script>
+    <style>
+    	table{
+    		width:90%;
+    		margin: 50px auto;
+    	}
+    	td,th{
+    		vertical-align: middle; 
+    		margin:20px;
+    		padding:5px;
+    		border:1px solid #CCCCCC;
+    		border-left:none;
+    		border-right:none;
+    	}
+    	.tableInfo{
+    		color:red;
+    		font-weight: 600;
+    		font-size: 20px;
+    		text-align:center;
+    	}
+    </style>  
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>修改出租单</strong></div>
+  <div class="body-content">
+    <form  action="updateRentTableHandler"  method="post">
+    	<input type="hidden" name="rentid" value="${table.rentid}" />
+		<table>
+			<tr>
+				<td>出租单编号</td>
+				<td>${table.rentNo}</td>
+				<td>预付金</td>
+				<td>${table.imprest}</td>
+			</tr>
+			<tr>
+				<td>应付金额</td>
+				<td>${table.pricePayAble}</td>
+				<td>实际交付金额</td>
+				<td><input type="text" name="realPay" value="${table.realPay}" />元</td>
+			</tr>
+			<tr>
+				<td>起租日期</td>
+				<td><input type="text" name="beginTime" value="${table.beginTime}" id="rentStartTime" class="Wdate" onfocus="WdatePicker({readOnly:true})" /></td>
+				<td>应还日期</td>
+				<td><input type="text" name="endTime" value="${table.endTime}" id="rentEndTime"  class="Wdate" onfocus="WdatePicker({readOnly:true})" /></td>
+			</tr>
+			<tr>
+				<td>归还日期</td>
+					<td><input type="text" name="realEndTime" value="${table.realEndTime}" id="realRentEndTime"  class="Wdate" onfocus="WdatePicker({readOnly:true})" /></td>
+				<td>出租单状态</td>
+				<td>
+					<select name="rentflag">
+						<option value="1">已出租</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>服务人员编号</td>
+				<td>
+					<input type="text" name="userName" readonly="readonly" value="${currentUser.username}"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" style="text-align: center;"><input type="submit" value="确定" id="send" />&nbsp;&nbsp;<input type="reset" value="重置" /></td>
+				<td></td>
+			</tr>
+		</table>
+	</form>
+	
+	<table>
+		<tr> 
+			<td colspan="6" class="tableInfo">客户信息</td>
+		</tr>
+		<tr>
+			<td>身份证</td>
+			<td>${customer.identity}</td>
+			<td>姓名</td>
+			<td>${customer.name}</td>
+			<td>性别</td>
+			<td>${customer.sex}</td>
+		</tr>
+		<tr>
+			<td>地址</td>
+			<td>${customer.address}</td>
+			<td>电话</td>
+			<td>${customer.phone}</td>
+			<td>职业</td>
+			<td>${customer.career}</td>
+		</tr>
+	</table>
+	
+	<table>
+		<tr>
+			<td colspan="6" class="tableInfo">汽车信息</td>
+		</tr>
+		<tr>
+			<td>车号</td>
+			<td>${car.number}</td>
+			<td>型号</td>
+			<td>${car.type}</td>
+			<td>颜色</td>
+			<td>${car.color}</td>
+		</tr>
+		<tr>
+			<td>价值</td>
+			<td>${car.price}</td>
+			<td>租金</td>
+			<td>${car.rentprice}</td>
+			<td>押金</td>
+			<td>${car.deposit}</td>
+		</tr>
+		<tr>
+			<td>租用情况</td>
+			<td>
+			<c:if test="${car.isrenting eq 0}">
+					未出租
+				</c:if>
+				<c:if test="${car.isrenting eq 1}">
+					已出租
+				</c:if>
+			</td>
+			<td cospan="2">简介</td>
+			<td>${car.description}</td>
+		</tr>
+	</table>
+  </div>
+</div>
+</body></html>

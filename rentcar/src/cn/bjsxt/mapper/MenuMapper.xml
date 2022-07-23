@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bjsxt.mapper.MenuMapper">
+	<select id="findMenuByUserId" resultType="cn.bjsxt.pojo.Menu">
+		<!-- select 项目:一定要跟实体类的属性字段一致. -->
+		SELECT m.menuid,m.name,m.parentid,m.url from menu m
+		LEFT JOIN role_menu rm ON m.menuId = rm.menuId
+		LEFT JOIN user ur ON ur.roleid = rm.roleid
+		WHERE userId = #{0}
+	</select>
+	<select id="showMenu" resultType="cn.bjsxt.pojo.Menu">
+		<!-- select 项目:一定要跟实体类的属性字段一致. -->
+		SELECT menuid,name,parentid from menu ORDER BY menuid
+	</select>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bjsxt.mapper.LogtableMapper">
+	<insert id="addLogtable">
+		INSERT into logtable(userid,username,action,actiontime)
+		 VALUES(#{userid},#{username},#{action},#{actiontime}) 
+	</insert>
+	<select id="findLoginlogTotalCount" resultType="java.lang.Integer"  >
+		select COUNT(loginid) from loginlog where username like #{0}
+	</select>
+	<select id="findLoginlog" resultType="cn.bjsxt.pojo.Loginlog" >
+		select loginid,userid,username,loginip,logintime from loginlog where logintime &lt;=
+		(select logintime from loginlog ORDER BY logintime DESC LIMIT #{0},1)
+		and username like #{2}
+		ORDER BY logintime DESC
+		LIMIT #{1}
+	</select>
+	<select id="findLogtableTotalCount" resultType="java.lang.Integer"  >
+		select COUNT(logid) from logtable where username like #{0}
+	</select>
+	<select id="findLogtable" resultType="cn.bjsxt.pojo.Logtable" >
+		select logid,userid,username,action,actiontime from logtable where actiontime &lt;=
+		(select actiontime from logtable ORDER BY actiontime DESC LIMIT #{0},1)
+		and username like #{2}
+		ORDER BY actiontime DESC
+		LIMIT #{1}
+	</select>
+</mapper>

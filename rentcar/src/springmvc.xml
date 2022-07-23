@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	<!-- 开启扫描 -->
+	<mvc:annotation-driven />
+	<!-- 指定controller扫描的包 -->
+	<context:component-scan base-package="cn.bjsxt.controller" />
+	<!-- 静态资源路径映射 -->
+	<mvc:resources location="/WEB-INF/static/" mapping="/**"></mvc:resources>
+	<!-- aop扫描 -->
+	<aop:aspectj-autoproxy />  
+	
+	
+	<!-- 视图解析器 -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 前缀 -->
+		<property name="prefix" value="/WEB-INF/pages/"></property>
+		<!-- 后缀 -->
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	 <!-- 拦截器 --> 
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />  
+			<mvc:exclude-mapping path="/**/images/*"/>
+			<mvc:exclude-mapping path="/**/js/*"/>
+			<mvc:exclude-mapping path="/**/css/*"/>
+			<mvc:exclude-mapping path="/**/code"/>
+			<mvc:exclude-mapping path="/**/userLogin"/>
+			<bean class="cn.bjsxt.interceptor.LoginCheck"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/addRole.do"/>
+			<bean class="cn.bjsxt.interceptor.RoleAddLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/updataRole.do"/>
+			<bean class="cn.bjsxt.interceptor.RoleUpdataLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/deleteRole"/>
+			<bean class="cn.bjsxt.interceptor.RoleDeleteLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/insertCustomer"/>
+			<bean class="cn.bjsxt.interceptor.CustomerAddLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/updateCustomer"/>
+			<bean class="cn.bjsxt.interceptor.CustomerUpdateLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/deleteCustomer"/>
+			<bean class="cn.bjsxt.interceptor.CustomerDeleteLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/addCarHandler"/>
+			<bean class="cn.bjsxt.interceptor.CarAddLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/deleteCar"/>
+			<bean class="cn.bjsxt.interceptor.CarDeleteLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/updateCarHandler"/>
+			<bean class="cn.bjsxt.interceptor.CarUpdataLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/userUpdate"/>
+			<bean class="cn.bjsxt.interceptor.UserUpdateLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/addUser"/>
+			<bean class="cn.bjsxt.interceptor.UserAddLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/deleteById"/>
+			<bean class="cn.bjsxt.interceptor.UserDeleteLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/dropRentTable"/>
+			<bean class="cn.bjsxt.interceptor.RentTableDropLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/updateRentTableHandler"/>
+			<bean class="cn.bjsxt.interceptor.RentTableUpdateLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/addRentTable"/>
+			<bean class="cn.bjsxt.interceptor.RentTableAddLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/addchecktable"/>
+			<bean class="cn.bjsxt.interceptor.CheckTableAddLogtalbe"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/updateChecktable"/>
+			<bean class="cn.bjsxt.interceptor.CheckTableUpdateLogtalbe"/>
+		</mvc:interceptor>
+	
+	</mvc:interceptors>
+	
+
+
+
+</beans>

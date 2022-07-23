@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bjsxt.mapper.ChecktableMapper">
+	<insert id="addChecktable">
+		INSERT into checktable(username,rentid,checkno,checktime,problem,paying,type,flag)
+		 VALUES(#{username},#{rentid},#{checkno},#{checktime},#{problem},#{paying},#{type},#{flag}) 
+	</insert>
+	
+	<select id="findChecktable" resultType="cn.bjsxt.pojo.Checktable" >
+	select checkid,username,rentid,checkno,checktime,problem,paying,type,flag
+	from checktable
+	<where>
+		<if test="username!='' and username!=null">
+			username like CONCAT (CONCAT('%',#{username}),'%')
+		</if>
+		<if test="rentid!='' and rentid!=null">
+			rentid =#{rentid}
+		</if>
+		<if test="checkno!='' and checkno!=null">
+			checkno like CONCAT (CONCAT('%',#{checkno}),'%')
+		</if>
+		<if test="checktime!='' and checktime!=null">
+			checktime like CONCAT (CONCAT('%',#{checktime}),'%')
+		</if>
+		<if test="problem!='' and problem!=null">
+			problem like CONCAT (CONCAT('%',#{problem}),'%')
+		</if>
+		<if test="paying!='' and paying!=null">
+			paying = #{paying}
+		</if>
+		<if test="type!='' and type!=null">
+			type like CONCAT (CONCAT('%',#{type}),'%')
+		</if>
+		<if test="flag!=-1">
+			flag =#{flag}
+		</if>
+	</where>
+		ORDER BY checkid DESC
+	</select>
+	<select id="findChecktableById" resultType="cn.bjsxt.pojo.Checktable">
+		select checkid,username,rentid,checkno,checktime,problem,paying,type,flag
+		from checktable where checkid=#{0}
+	</select>
+	<update id="updateChecktable" parameterType="cn.bjsxt.pojo.Checktable">
+		update checktable set username=#{username},rentid=#{rentid},checkno=#{checkno},checktime=#{checktime},problem=#{problem},paying=#{paying},type=#{type},flag=#{flag} where checkno = #{checkno}
+	</update>
+	
+	
+</mapper>

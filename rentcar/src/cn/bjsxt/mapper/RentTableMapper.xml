@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bjsxt.mapper.RentTableMapper">
+
+	<update id="updateRentTable" parameterType="cn.bjsxt.pojo.RentTable" >
+		update renttable
+		<set>
+			<if test="realEndTime!=null">
+				realEndTime = #{realEndTime},
+			</if>
+			<if test="beginTime!=null">
+				beginTime = #{beginTime},
+			</if>
+			<if test="endTime!=null">
+				endTime = #{endTime},
+			</if>
+			<if test="userName!=null">
+				userName = #{userName}
+			</if>
+		</set>
+		where rentid=#{rentid}
+	</update>
+
+	<select id="findTableById"  resultType="cn.bjsxt.pojo.RentTable" >
+		select rentid,carNumber,custIdentity,userName,rentNo,imprest,pricePayAble,realPay,beginTime,endTime,realEndTime,rentFlag
+		from renttable where rentid=#{0}
+	</select>
+
+	<!-- 废弃出租单 -->
+	<update id="changeRentFlag" parameterType="int">
+		update renttable set rentFlag="3" where rentid=#{0}
+	</update>
+	<!-- 结算出租单 -->
+	<update id="updateFlagById" >
+		update renttable set rentFlag="2",realendtime=#{1} where rentid=#{0}
+	</update>
+
+	<insert id="addRentTable" parameterType="cn.bjsxt.pojo.RentTable">
+		insert into renttable
+		(carNumber,custIdentity,userName,rentNo,imprest,pricePayAble,realPay,beginTime,endTime,realEndTime,rentFlag)
+		values( #{carNumber}, #{custIdentity},#{userName},#{rentNo},#{imprest},#{pricePayAble},#{realPay},#{beginTime},#{endTime},
+		#{realEndTime},#{rentFlag})
+	</insert>
+
+<select id="findRenttables" resultType="cn.bjsxt.pojo.RentTable" >
+	select rentid,carNumber,custIdentity,userName,rentNo,imprest,pricePayAble,realPay,beginTime,endTime,realEndTime,rentFlag
+	from renttable
+	<where>
+		<if test="rentNo!=null">
+			rentno = #{rentNo}
+		</if>
+		<if test="realEndTime!=null">
+			realEndTime = #{realEndTime}
+		</if>
+		<if test="beginTime!=null">
+			beginTime = #{beginTime}
+		</if>
+		<if test="endTime!=null">
+			endTime = #{endTime}
+		</if>
+		<if test="rentFlag!=null">
+			rentFlag = #{rentFlag}
+		</if>
+		<if test="userName!=null">
+			userName = #{userName}
+		</if>
+		<if test="carNumber!=null">
+			carNumber = #{carNumber}
+		</if>
+		<if test="custIdentity!=null">
+			custIdentity = #{custIdentity}
+		</if>
+	</where>
+		ORDER BY rentFlag,rentid desc
+	</select>
+	
+	<select id="findRentableByRentNo"  resultType="cn.bjsxt.pojo.RentTable" >
+		select rentid,carNumber,custIdentity,userName,rentNo,imprest,pricePayAble,realPay,beginTime,endTime,realEndTime,rentFlag
+		from renttable where rentNo=#{0}
+	</select>
+	<select id="findRentableByEndTime"  resultType="cn.bjsxt.pojo.RentTable" >
+		select rentid,carNumber,custIdentity,userName,rentNo,imprest,pricePayAble,realPay,beginTime,endTime,realEndTime,rentFlag
+		from renttable where endTime like CONCAT (CONCAT('%',#{0}),'%') and rentFlag=2
+	</select>
+	
+	</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bjsxt.mapper.CustomerMapper">
+	
+	<select id="findCustomerByIdentity" resultType="cn.bjsxt.pojo.Customer">
+		select custid,name,pwd,sex,identity,phone,career,address
+		from customer where identity=#{0}
+		order by custid
+	</select>
+
+	<select id="selectAll" resultType="cn.bjsxt.pojo.Customer">
+		select custid,name,pwd,sex,identity,phone,career,address from
+		customer order by custid
+	</select>
+	
+	<!-- 通过身份证精确查询客户 -->
+	<select id="findCustByCard" resultType="cn.bjsxt.pojo.Customer">
+		select custid,identity from customer where identity=#{0}
+	</select>
+	
+	<select id="selectCusts" resultType="cn.bjsxt.pojo.Customer">
+		select custid,name,pwd,sex,identity,phone,career,address 
+		from  customer  
+		where name like CONCAT (CONCAT('%',#{0}),'%')
+		and identity like CONCAT (CONCAT('%',#{1}),'%')
+		order by custid
+	</select>
+	
+	<select id="login" resultType="cn.bjsxt.pojo.Customer">
+		select custid,name,pwd,sex,identity,phone,career,address 
+		from customer
+		where name = #{0} and pwd = #{1}
+	</select>
+	<delete id="deleteByCustId">
+		delete from customer where custid = #{0}
+	</delete>
+	<insert id="addCustomer">
+		insert into customer (name,pwd,sex,identity,phone,career,address)
+		value(#{name},#{pwd},#{sex},#{identity},#{phone},#{career},#{address})
+	</insert>
+	<update id="updateCustomer" parameterType="cn.bjsxt.pojo.Customer">
+		update customer
+		<set>
+			<if test="name!=null"> name=#{name}, </if>
+			<if test="pwd!=null"> pwd=#{pwd}, </if>
+			<if test="sex!=null"> sex=#{sex}, </if>
+			<if test="identity!=null"> identity=#{identity}, </if>
+			<if test="phone!=null"> phone=#{phone}, </if>
+			<if test="career!=null"> career=#{career}, </if>
+			<if test="address!=null"> address=#{address} </if>
+		</set>
+		<where>
+			custid = #{custId}
+		</where>
+	</update>
+	
+	<delete id="deleteCustomer">
+		delete from customer where custid = #{0}
+	</delete>
+	
+	
+	
+</mapper>
